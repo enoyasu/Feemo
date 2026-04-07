@@ -1,6 +1,7 @@
 import SwiftUI
+import UIKit
 
-// MARK: - Color from Hex
+// MARK: - Color from Hex (brand colors only)
 extension Color {
     static func fromHex(_ hex: String) -> Color {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -30,16 +31,33 @@ extension Color {
 // MARK: - Design Tokens
 enum DesignTokens {
     enum Colors {
-        static let background = Color.fromHex("F7F5F2")
-        static let surface = Color.white
-        static let surfaceSecondary = Color.fromHex("F0EEF0")
-        static let primaryText = Color.fromHex("2D2D2D")
-        static let secondaryText = Color.fromHex("8A8A8A")
-        static let tertiaryText = Color.fromHex("BABABA")
-        static let border = Color.fromHex("EBEBEB")
+        // ── Adaptive (Light / Dark mode 自動対応) ──
+        /// アプリ全体の背景
+        static let background = Color(UIColor.systemGroupedBackground)
+        /// カード・シート背景
+        static let surface = Color(UIColor.secondarySystemGroupedBackground)
+        /// セカンダリ背景（チップ等）
+        static let surfaceSecondary = Color(UIColor.tertiarySystemGroupedBackground)
+        /// 主テキスト
+        static let primaryText = Color(UIColor.label)
+        /// 補助テキスト
+        static let secondaryText = Color(UIColor.secondaryLabel)
+        /// 第三テキスト（時刻・ラベル等）
+        static let tertiaryText = Color(UIColor.tertiaryLabel)
+        /// 区切り線・ボーダー
+        static let border = Color(UIColor.separator)
+
+        // ── Brand colors (ライト/ダーク共通のブランドカラー) ──
+        /// メインアクセント（くすみラベンダー）
         static let accent = Color.fromHex("B5A8D8")
-        static let accentSoft = Color.fromHex("EAE6F4")
-        static let destructive = Color.fromHex("E88A8A")
+        /// アクセントの薄背景（ライト: 薄ラベンダー / ダーク: 深ラベンダー）
+        static let accentSoft = Color(UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(red: 0.18, green: 0.16, blue: 0.26, alpha: 1.0)
+                : UIColor(red: 0.918, green: 0.902, blue: 0.957, alpha: 1.0)
+        })
+        /// エラー・削除
+        static let destructive = Color(UIColor.systemRed)
     }
 
     enum Radius {
@@ -69,7 +87,7 @@ enum DesignTokens {
     }
 }
 
-// MARK: - View Modifiers
+// MARK: - Card Style
 struct CardStyle: ViewModifier {
     func body(content: Content) -> some View {
         content

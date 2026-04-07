@@ -19,6 +19,11 @@ enum APIConfig {
     }
 
     nonisolated static func resolveIsConfigured() -> Bool {
-        resolveBaseURL().contains("YOUR_SUBDOMAIN") == false
+        #if DEBUG
+        // DEBUG builds only use Live API when FEEMO_API_URL is explicitly set
+        return ProcessInfo.processInfo.environment["FEEMO_API_URL"] != nil
+        #else
+        return !resolveBaseURL().contains("YOUR_SUBDOMAIN")
+        #endif
     }
 }
