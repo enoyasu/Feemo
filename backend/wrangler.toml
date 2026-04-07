@@ -1,0 +1,19 @@
+name = "feemo-api"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "feemo-db"
+database_id = "YOUR_D1_DATABASE_ID"  # Replace after: wrangler d1 create feemo-db
+
+[vars]
+APPLE_TEAM_ID = "5K5YCF5332"
+APPLE_CLIENT_ID = "com.yasu.dev.app.Feemo"
+# JWT_SECRET は wrangler secret put で設定すること（gitには入れない）
+# openssl rand -hex 32 | wrangler secret put JWT_SECRET
+
+[queues]
+# Future: push notification queue
+# producers = [{ queue = "feemo-notifications", binding = "NOTIFICATION_QUEUE" }]

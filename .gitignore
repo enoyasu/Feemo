@@ -1,0 +1,43 @@
+# ===== Xcode =====
+# ユーザー固有のXcode設定（コミット不要）
+xcuserdata/
+*.xcuserstate
+*.xcscheme
+
+# Derived Data
+DerivedData/
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+
+# Build artifacts
+build/
+*.o
+*.d
+
+# ===== Swift Package Manager =====
+.swiftpm/
+Packages/
+Package.resolved
+
+# ===== Node.js / Cloudflare Workers =====
+backend/node_modules/
+backend/.wrangler/
+backend/dist/
+backend/.dev.vars          # ローカル開発用シークレット（絶対にcommit禁止）
+
+# ===== Secrets / Environment =====
+.env
+.env.*
+*.env
+!.env.example
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
