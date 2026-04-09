@@ -6,7 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "feemo-db"
-database_id = "YOUR_D1_DATABASE_ID"  # Replace after: wrangler d1 create feemo-db
+database_id = "2a71dee6-34a9-4a07-901a-475dd0055c02"
 
 [vars]
 APPLE_TEAM_ID = "5K5YCF5332"

@@ -14,7 +14,7 @@ enum APIConfig {
         #if DEBUG
         return "http://localhost:8787"
         #else
-        return "https://feemo-api.YOUR_SUBDOMAIN.workers.dev"
+        return "https://feemo-api.feemo.workers.dev"
         #endif
     }
 

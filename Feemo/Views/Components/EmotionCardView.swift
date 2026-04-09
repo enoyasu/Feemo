@@ -5,6 +5,8 @@ struct EmotionCardView: View {
     let currentUserId: String
     var onReaction: ((ReactionType) -> Void)? = nil
 
+    private var isOwnPost: Bool { post.userId == currentUserId }
+
     private var emotion: EmotionType? {
         EmotionType(rawValue: post.emotionPrimary)
     }
@@ -51,7 +53,18 @@ struct EmotionCardView: View {
 
                     Spacer()
 
-                    // Visibility badge
+                    // Own post badge
+                    if isOwnPost {
+                        Text("自分")
+                            .font(DesignTokens.Typography.caption)
+                            .foregroundStyle(DesignTokens.Colors.secondaryText)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(DesignTokens.Colors.surfaceSecondary)
+                            .cornerRadius(DesignTokens.Radius.small)
+                    }
+
+                    // Private scope badge
                     if post.visibilityScope == .private {
                         Image(systemName: "lock.fill")
                             .font(.caption2)
@@ -80,16 +93,55 @@ struct EmotionCardView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
-                // Reactions
-                ReactionBarView(
-                    post: post,
-                    currentUserId: currentUserId,
-                    onReaction: onReaction
-                )
+                // Reactions: own posts show read-only counts, others show interactive chips
+                if isOwnPost {
+                    OwnPostReactionSummary(post: post, emotionColor: emotionColor)
+                } else {
+                    ReactionBarView(
+                        post: post,
+                        currentUserId: currentUserId,
+                        onReaction: onReaction
+                    )
+                }
             }
             .padding(DesignTokens.Spacing.md)
         }
         .cardStyle()
+    }
+}
+
+// MARK: - Read-only reaction summary for own posts
+struct OwnPostReactionSummary: View {
+    let post: EmotionPost
+    let emotionColor: Color
+
+    private var receivedReactions: [(ReactionType, Int)] {
+        ReactionType.allCases.compactMap { type in
+            let count = post.reactionCount(for: type)
+            return count > 0 ? (type, count) : nil
+        }
+    }
+
+    var body: some View {
+        if !receivedReactions.isEmpty {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: DesignTokens.Spacing.xs) {
+                    ForEach(receivedReactions, id: \.0) { reaction, count in
+                        HStack(spacing: 3) {
+                            Text(reaction.label)
+                                .font(DesignTokens.Typography.small)
+                            Text("\(count)")
+                                .font(DesignTokens.Typography.small)
+                        }
+                        .foregroundStyle(emotionColor)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 5)
+                        .background(emotionColor.opacity(0.10))
+                        .cornerRadius(DesignTokens.Radius.small)
+                    }
+                }
+            }
+        }
     }
 }
 
